@@ -5,11 +5,11 @@ interface IPlayerControl {
     audioRef: HTMLAudioElement
 }
 
-export function PlayerProgress({audioRef}:IPlayerControl) {
+export function PlayerProgress({ audioRef }: IPlayerControl) {
     const [isPlay, setIsPlay] = useState(false)
-
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
 
     function startPlay() {
         audioRef.play()
@@ -25,9 +25,16 @@ export function PlayerProgress({audioRef}:IPlayerControl) {
         audioRef.currentTime = newTime;
     }
 
+    function formatTime(seconds: number) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
     useEffect(() => {
         if (audioRef) {
             const updateProgress = () => {
+                setCurrentTime(audioRef.currentTime);
                 setProgress((audioRef.currentTime / audioRef.duration) * 100);
             };
 
@@ -45,7 +52,7 @@ export function PlayerProgress({audioRef}:IPlayerControl) {
         }
     }, [audioRef]);
 
-    
+
     return (
         <div className="flex flex-col items-center justify-center">
             <div className="flex gap-3 items-center">
@@ -54,13 +61,17 @@ export function PlayerProgress({audioRef}:IPlayerControl) {
                 {isPlay && <Icon.PauseCircle className="h-10 w-10 cursor-pointer hover:text-white" onClick={pausePlay} />}
                 {/* <img className="w-5 h-5 filter invert cursor-pointer m-2 transform -scale-x-100" src="https://cdn-icons-png.freepik.com/512/84/84268.png" /> */}
             </div>
-            <input
-                type="range"
-                className="w-[500px] h-1 m-5"
-                max={100}
-                value={progress}
-                onChange={handleRangeChange}
-            />
+            <div className="flex items-center">
+                <div>{formatTime(currentTime)}</div>
+                <input
+                    type="range"
+                    className="w-[500px] h-1 m-5"
+                    max={100}
+                    value={progress}
+                    onChange={handleRangeChange}
+                />
+                <div>{formatTime(duration)}</div>
+            </div>
         </div>
     )
 }
