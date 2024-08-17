@@ -1,5 +1,5 @@
 'use client'
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, LegacyRef, useCallback, useEffect, useRef, useState } from "react";
 import { IRssItem } from '../../services/rss-to-json'
 import { PodcastsGrid } from "../components/PodcastsGrid";
 import { Main } from "../components/Main";
@@ -8,28 +8,43 @@ import { Player } from "../components/Player";
 import { Sidebar } from "../components/Siderbar";
 
 export default function Page() {
-    const [form, setForm] = useState('')
-    const [rss, setRss] = useState<IRssItem[] | null>(null)
+    const [rssItems, setRssItems] = useState<IRssItem[] | null>(null)
+    const [selectedRssItem, setSelectedRssItem] = useState<IRssItem | null>(null)
+    
+
+    const audioRef = useRef<HTMLAudioElement | null>(null)
+
+    const latestEpisodes = rssItems?.slice(0, 4)
+    const otherEpisodes = rssItems?.slice(4)
 
     const setRessCallback = useCallback(async (offset: number, limit: number) => {
         const rssRes = await window.ipc.handle<IRssItem[]>('rss-get-items', [offset, limit])
-        setRss(rssRes)
+        setRssItems(rssRes)
     }, [])
+
+    const setSelectRssItemCallback = useCallback((item: IRssItem) => {
+        setSelectedRssItem(item)
+        localStorage.setItem('selectedRssItem', JSON.stringify(item))
+        audioRef.current.autoplay = true
+        console.log(audioRef.current)
+    }, [])
+
 
     useEffect(() => {
         (async () => {
             await setRessCallback(1, 12)
         })();
-    }, [setRessCallback])
 
-    const lastEp = rss?.slice(0, 4)
-    const ep = rss?.slice(4)
+        const selectedRssItemStorage = JSON.parse(localStorage.getItem('selectedRssItem'))
+        if(selectedRssItemStorage) {
+            setSelectedRssItem(selectedRssItemStorage)
+        }
+    }, [setRessCallback])
 
     return (
         <div className='flex gap-1 fixed'>
-            {rss ? (
+            {rssItems ? (
                 <>
-
                     <Sidebar.Root>
                         <Sidebar.Content>
                             <Sidebar.Header />
@@ -44,8 +59,8 @@ export default function Page() {
                         <Main.Title title="Últimos Episódios" />
 
                         <PodcastsGrid.Root>
-                            {lastEp.map((item) => (
-                                <PodcastsGrid.Content key={item.id + '_last'}>
+                            {latestEpisodes.map((item) => (
+                                <PodcastsGrid.Content key={item.id + '_last'} onClick={() => setSelectRssItemCallback(item)}>
                                     <PodcastsGrid.Card image={item.itunes_image.href} author={item.author} title={item.title} published={item.published} durationate={item['itunes_duration']} />
                                 </PodcastsGrid.Content>
                             ))}
@@ -54,21 +69,24 @@ export default function Page() {
                         <Main.Title title="Episódios" />
 
                         <PodcastsGrid.Root>
-                            {ep.map((item) => (
-                                <PodcastsGrid.Content key={item.id + '_ep'}>
+                            {otherEpisodes.map((item) => (
+                                <PodcastsGrid.Content key={item.id + '_episodes'} onClick={() => setSelectRssItemCallback(item)}>
                                     <PodcastsGrid.Card image={item.itunes_image.href} author={item.author} title={item.title} published={item.published} durationate={item['itunes_duration']} />
                                 </PodcastsGrid.Content>
                             ))}
                         </PodcastsGrid.Root>
                     </ Main.Root>
 
-                    <Footer.Root>
-                        <Player.Root>
-                            <Player.Info author={'Jovem nerd'} image="https://i.scdn.co/image/ab67656300005f1f1a3579d894141338e90b87d6" title="Affonso Solano, Beto Estrada e Didi " />
-                            <Player.Progress />
-                            <Player.Control />
-                        </Player.Root>
-                    </Footer.Root>
+                    <audio src={selectedRssItem?.enclosures[0].url} ref={audioRef}></audio>
+                    {selectedRssItem && audioRef.current &&(
+                        <Footer.Root>
+                            <Player.Root>
+                                <Player.Info author={selectedRssItem?.author} image={selectedRssItem?.itunes_image.href} title={selectedRssItem?.title} />
+                                <Player.Progress audioRef={audioRef.current}/>
+                                <Player.Control audioRef={audioRef.current} selectedRssItem={selectedRssItem} />
+                            </Player.Root>
+                        </Footer.Root>
+                    )}
                 </>
             ) : 'Carregando...'}
 
