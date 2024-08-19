@@ -1,3 +1,6 @@
+<!-- Icon https://reactsvgicons.com/ -->
+<!-- Podcast RSS https://chartable.com/ -->
+
 <p align="center"><img src="./read.png"></p>
 
 ## RSS Podcasts

@@ -67,7 +67,7 @@ export function PlayerProgress({ audioRef }: IPlayerControl) {
                     type="range"
                     className="w-[500px] h-1 m-5"
                     max={100}
-                    value={progress}
+                    value={progress || 0}
                     onChange={handleRangeChange}
                 />
                 <div>{formatTime(duration)}</div>

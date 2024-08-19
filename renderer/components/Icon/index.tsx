@@ -1,3 +1,4 @@
+import { IconAddSolid } from "./IconAddSolid";
 import { IconBxsVolumeFull } from "./IconBxsVolumeFull";
 import { IconBxsVolumeLow } from "./IconBxsVolumeLow";
 import { IconBxsVolumeMute } from "./IconBxsVolumeMute";
@@ -9,5 +10,6 @@ export const Icon = {
     BxsVolumeMute: IconBxsVolumeMute,
     BxsVolumeLow: IconBxsVolumeLow,
     PlayCircle: IconPlayCircle,
-    PauseCircle: IconPauseCircle
+    PauseCircle: IconPauseCircle,
+    AddSolid: IconAddSolid,
 }

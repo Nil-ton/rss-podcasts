@@ -11,7 +11,6 @@ export default function Page() {
     const [rssItems, setRssItems] = useState<IRssItem[] | null>(null)
     const [selectedRssItem, setSelectedRssItem] = useState<IRssItem | null>(null)
     
-
     const audioRef = useRef<HTMLAudioElement | null>(null)
 
     const latestEpisodes = rssItems?.slice(0, 4)
@@ -26,7 +25,6 @@ export default function Page() {
         setSelectedRssItem(item)
         localStorage.setItem('selectedRssItem', JSON.stringify(item))
         audioRef.current.autoplay = true
-        console.log(audioRef.current)
     }, [])
 
 
@@ -36,6 +34,7 @@ export default function Page() {
         })();
 
         const selectedRssItemStorage = JSON.parse(localStorage.getItem('selectedRssItem'))
+        
         if(selectedRssItemStorage) {
             setSelectedRssItem(selectedRssItemStorage)
         }
@@ -48,7 +47,7 @@ export default function Page() {
                     <Sidebar.Root>
                         <Sidebar.Content>
                             <Sidebar.Header />
-                            <Sidebar.Actions icon='https://cdn-icons-png.flaticon.com/512/992/992651.png' text='Adicionar' />
+                            <Sidebar.Actions text='Adicionar' />
                         </Sidebar.Content>
                         <Sidebar.Content>
                             <p className='text-xl font-semibold p-2'>Sua Biblioteca</p>
@@ -89,7 +88,6 @@ export default function Page() {
                     )}
                 </>
             ) : 'Carregando...'}
-
         </div>
     )
 }
