@@ -1,5 +1,6 @@
+import { Footer } from '../components/Footer'
+import { Player } from '../components/Player'
 import { Sidebar } from '../components/Siderbar'
-import { SidebarContent } from '../components/Siderbar/SidebarContent'
 import '../styles/globals.css'
 export default function RootLayout({
     children
@@ -8,8 +9,26 @@ export default function RootLayout({
 }) {
     return (
         <html lang='pt-br'>
-            <body>
-                {children}
+            <body className='flex gap-1 fixed min-h-screen'>
+                    <Sidebar.Root>
+                        <Sidebar.Content>
+                            <Sidebar.Header />
+                            <Sidebar.Actions text='Adicionar' />
+                        </Sidebar.Content>
+                        <Sidebar.Content>
+                            <p className='text-xl font-semibold p-2'>Sua Biblioteca</p>
+                        </Sidebar.Content>
+                    </Sidebar.Root>
+
+                    {children}
+
+                    <Footer.Root>
+                        <Player.Root>
+                            <Player.Info />
+                            <Player.Progress />
+                            <Player.Control />
+                        </Player.Root>
+                    </Footer.Root>
             </body>
         </html>
     )

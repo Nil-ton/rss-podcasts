@@ -1,11 +1,14 @@
+'use client'
 import { useEffect, useState } from "react";
 import { Icon } from "../Icon";
+import { stateManager } from "../../stateManager";
 
 interface IPlayerControl {
     audioRef: HTMLAudioElement
 }
 
-export function PlayerProgress({ audioRef }: IPlayerControl) {
+export function PlayerProgress() {
+    const audioRef= stateManager.useSelectedPodcastPlay((state) => state.control)
     const [isPlay, setIsPlay] = useState(false)
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);

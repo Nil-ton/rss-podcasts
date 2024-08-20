@@ -1,5 +1,7 @@
-import { recentlyAddedPodcasts } from "./recentlyAdded";
+import { useRecentlyAddedPodcasts } from "./recentlyAdded";
+import { useSelectedPodcastPlay } from "./selectedPodcastPlay";
 
-export const useStateManager = {
-    recentlyAddedPodcasts
+export const stateManager = {
+    useRecentlyAddedPodcasts,
+    useSelectedPodcastPlay
 }
