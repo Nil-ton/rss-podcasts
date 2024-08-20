@@ -8,6 +8,10 @@ interface ISelectedPodcastPlay {
     control: HTMLAudioElement | null
     volume: number
     muted: boolean
+    currentTime: number
+    isPlay: boolean 
+    progress: number
+    duration:number
 }
 
 interface IActions {
@@ -16,6 +20,10 @@ interface IActions {
     setControl: (ref: HTMLAudioElement) => void
     setVolume: (number:number) => void
     setMuted: (boolean: boolean) => void
+    setCurrentTime: (newCurrent: number) => void
+    setIsPlay: (boolean: boolean) => void
+    setProgress: (newProgress: number) => void
+    setDuration: (newDuration: number) => void
 }
 
 export const useSelectedPodcastPlay = create(persist<ISelectedPodcastPlay & IActions>(
@@ -25,6 +33,22 @@ export const useSelectedPodcastPlay = create(persist<ISelectedPodcastPlay & IAct
         control: null,
         volume: 0,
         muted: false,
+        currentTime: 0,
+        isPlay: false,
+        progress: 0,
+        duration: 0,
+        setDuration(newDuration) {
+            set({duration: newDuration})
+        },
+        setProgress(newProgress) {
+            set({progress: newProgress})
+        },
+        setIsPlay(boolean) {
+            set({isPlay: boolean})
+        },
+        setCurrentTime(newCurrent) {
+            set({currentTime: newCurrent})
+        },
         setMuted(boolean) {
             if(boolean) {
                 get().control.volume = 0
@@ -49,6 +73,7 @@ export const useSelectedPodcastPlay = create(persist<ISelectedPodcastPlay & IAct
             if (get().isLoading) return
             get().setIsLoading(true)
             set({ item: newItem })
+            set({isPlay: true})
             get().setIsLoading(false)
             get().control.autoplay = true
         },
@@ -56,6 +81,6 @@ export const useSelectedPodcastPlay = create(persist<ISelectedPodcastPlay & IAct
     {
         name: 'selected-podcast-play-storage',
         storage: createJSONStorage(() => localStorage),
-        partialize: (state) =>  Object.fromEntries(Object.entries(state).filter(([key]) => !['isLoading', 'control'].includes(key))) as (ISelectedPodcastPlay & IActions),
+        partialize: (state) =>  Object.fromEntries(Object.entries(state).filter(([key]) => !['isLoading', 'control', 'isPlay'].includes(key))) as (ISelectedPodcastPlay & IActions),
     }
 ))

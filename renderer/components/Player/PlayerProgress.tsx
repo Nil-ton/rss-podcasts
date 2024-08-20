@@ -9,10 +9,10 @@ interface IPlayerControl {
 
 export function PlayerProgress() {
     const audioRef= stateManager.useSelectedPodcastPlay((state) => state.control)
-    const [isPlay, setIsPlay] = useState(false)
-    const [progress, setProgress] = useState(0);
-    const [duration, setDuration] = useState(0);
-    const [currentTime, setCurrentTime] = useState(0);
+    const [currentTime, setCurrentTime]= stateManager.useSelectedPodcastPlay((state) => [state.currentTime, state.setCurrentTime])
+    const [isPlay, setIsPlay]= stateManager.useSelectedPodcastPlay((state) => [state.isPlay, state.setIsPlay])
+    const [progress, setProgress]= stateManager.useSelectedPodcastPlay((state) => [state.progress, state.setProgress])
+    const [duration, setDuration]= stateManager.useSelectedPodcastPlay((state) => [state.duration, state.setDuration])
 
     function startPlay() {
         audioRef.play()

@@ -13,7 +13,7 @@ export default function RootLayout({
                     <Sidebar.Root>
                         <Sidebar.Content>
                             <Sidebar.Header />
-                            <Sidebar.Actions text='Adicionar' />
+                            <Sidebar.ActionsAdd  />
                         </Sidebar.Content>
                         <Sidebar.Content>
                             <p className='text-xl font-semibold p-2'>Sua Biblioteca</p>
