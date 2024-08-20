@@ -7,7 +7,7 @@ interface IRecentlyAddedPodcasts {
 }
 
 interface IActions {
-    update(offset: number, limit: number): Promise<void>
+    setItems(offset: number, limit: number): Promise<void>
     setIsLoading(isLoading: boolean): void
 }
 
@@ -17,11 +17,11 @@ export const useRecentlyAddedPodcasts = create<IRecentlyAddedPodcasts & IActions
     setIsLoading(isLoading) {
         set({isLoading: isLoading})
     },
-    update: async (offset: number, limit: number) => {
+    setItems: async (offset: number, limit: number) => {
         if(get().isLoading) return
         get().setIsLoading(true)
         const newItems: IRssItem[] = await window.ipc.handle('rss-get-items', [offset, limit])
-        set({ items: [...get().items, ...newItems] })
+        set({ items: newItems})
         get().setIsLoading(false)
     },
 }))
