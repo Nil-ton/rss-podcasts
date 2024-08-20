@@ -15,6 +15,7 @@ export function PlayerProgress() {
     const [duration, setDuration]= stateManager.useSelectedPodcastPlay((state) => [state.duration, state.setDuration])
 
     function startPlay() {
+        audioRef.currentTime = currentTime
         audioRef.play()
         setIsPlay(true)
     }
