@@ -9,7 +9,7 @@ import { stateManager } from "../stateManager";
 
 export default function Page() {
     const [podcastRecently, setPodcastRecently] = stateManager.useRecentlyAddedPodcasts((state) => [state.items, state.setItems])
-    const setSelectedPodcast = stateManager.useSelectedPodcastPlay((state) => state.update)
+    const setSelectedPodcast = stateManager.useSelectedPodcastPlay((state) => state.setItem)
     
 
     useEffect(() => {

@@ -15,7 +15,7 @@ interface ISelectedPodcastPlay {
 }
 
 interface IActions {
-    update(newItem: IRssItem): Promise<void>
+    setItem(newItem: IRssItem): Promise<void>
     setIsLoading(isLoading: boolean): void
     setControl: (ref: HTMLAudioElement) => void
     setVolume: (number:number) => void
@@ -69,13 +69,18 @@ export const useSelectedPodcastPlay = create(persist<ISelectedPodcastPlay & IAct
         setIsLoading(isLoading) {
             set({ isLoading })
         },
-        update: async (newItem) => {
+        setItem: async (newItem) => {
             if (get().isLoading) return
             get().setIsLoading(true)
             set({ item: newItem })
             set({isPlay: true})
             get().setIsLoading(false)
-            get().control.autoplay = true
+
+            if(get().item.title !== newItem.title || get().control.paused && get().item.title === newItem.title) {
+                get().control.currentTime = get().currentTime
+                get().control.autoplay = true
+            }
+
         },
     }),
     {
