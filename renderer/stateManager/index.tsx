@@ -4,6 +4,7 @@ import { useDialogControl } from "./dialogControl";
 import { useDurationStore } from "./durationStore";
 import { useIsPlay } from "./isPlay";
 import { useMutedStore } from "./mutedStore";
+import { usePodcasts } from "./podcasts";
 import { useProgressStore } from "./progressStore";
 import { useRecentlyAddedPodcasts } from "./recentlyAdded";
 import { useSelectedPodcastPlay } from "./selectedPodcastPlay";
@@ -20,4 +21,5 @@ export const stateManager = {
     useCurrentTimeStore,
     useAudioControl,
     useIsPlay,
+    usePodcasts
 }

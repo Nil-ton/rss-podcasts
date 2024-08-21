@@ -13,7 +13,7 @@ const handler = {
       ipcRenderer.removeListener(channel, subscription)
     }
   },
-  async handle<T>(channel:string, value:any): Promise<T> {
+  async handle<T>(channel:string, value?:any): Promise<T> {
     const rss = await ipcRenderer.invoke(channel, value)
     return rss
   }
