@@ -15,7 +15,7 @@ export default function Page() {
 
     const ifNotVolumeStorage = useCallback(() => {
         const isVolumeStorage = JSON.parse(localStorage.getItem('volume-storage'))
-        if (!isVolumeStorage.state.volume) {
+        if (!isVolumeStorage) {
             setVolume(.5)
         }
     }, [])
