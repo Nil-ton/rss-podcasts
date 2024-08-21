@@ -20,11 +20,19 @@ const formatDate = (dateString: string): string => {
     return formatter.format(date);
   };
 
-  const formatDuration = (timeString: string): string => {
-    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+  const formatDuration = (time: number | string): string => {
+    let totalMinutes: number;
   
-    // Calcula o total de minutos
-    const totalMinutes = hours * 60 + minutes + (seconds / 60);
+    if (typeof time === 'number') {
+      // Se a duração for um número, assume-se que é a duração em segundos.
+      totalMinutes = time / 60;
+    } else {
+      // Se a duração for uma string no formato "HH:MM:SS"
+      const [hours = 0, minutes = 0, seconds = 0] = time.split(':').map(Number);
+  
+      // Calcula o total de minutos
+      totalMinutes = hours * 60 + minutes + (seconds / 60);
+    }
   
     // Formata o resultado
     return `${Math.floor(totalMinutes)} min`;
