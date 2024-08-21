@@ -4,18 +4,16 @@ import { IRssItem } from "../../../services/rss-to-json"
 import { Icon } from "../Icon"
 import { stateManager } from "../../stateManager"
 
-interface IPlayerControl {
-    audioRef: HTMLAudioElement
-    selectedRssItem: IRssItem
-}
 
 export function PlayerControl() {
-    const [volume, setVolume]= stateManager.useSelectedPodcastPlay((state) => [state.volume, state.setVolume])
-    const [muted, setMuted]= stateManager.useSelectedPodcastPlay((state) => [state.muted, state.setMuted])
+    const [volume, setVolume]= stateManager.useVolumeStore((state) => [state.volume, state.setVolume])
+    const [muted, setMuted]= stateManager.useMutedStore((state) => [state.muted, state.setMuted])
+    const audioControl= stateManager.useAudioControl((state) => state.control)
 
     const setVolumeCallback = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const newVolume = Number(e.target.value)
         setVolume(newVolume)
+        audioControl.volume = newVolume
     }, [])
 
 

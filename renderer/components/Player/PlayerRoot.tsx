@@ -5,28 +5,30 @@ import { stateManager } from "../../stateManager"
 interface IPlayerRoot {
     children: React.ReactNode
 }
+
 export function PlayerRoot({ children }: IPlayerRoot) {
-    const [selectedPodcastPlay, setControl, volume, muted] = stateManager.useSelectedPodcastPlay((state) => [state.item, state.setControl, state.volume, state.muted])
+    const selectedPodcastPlay = stateManager.useSelectedPodcastPlay((state) => state.item)
+    const setControl = stateManager.useAudioControl((state) => state.setControl)
+
     const audioRef = useRef<HTMLAudioElement | null>(null)
 
     useEffect(() => {
-        if (muted) {
-            audioRef.current.volume = 0
+        let isMounted = true
+        if(audioRef && isMounted) {
+            setControl(audioRef.current)
         }
-        if (!muted && volume) {
-            audioRef.current.volume = volume
+        return () => {
+            isMounted = false
         }
-
-        setControl(audioRef.current)
-    }, [audioRef.current])
+    }, [audioRef])
 
     return (
         <>
-            <audio src={selectedPodcastPlay?.enclosures[0].url} ref={audioRef}></audio>
-            {audioRef.current && selectedPodcastPlay && (
-            <div className="flex justify-between p-4 bg-background w-screen">
-                {children}
-            </div>
+            <audio src={selectedPodcastPlay?.enclosures[0].url} ref={audioRef} />
+            {selectedPodcastPlay && (
+                <div className="flex justify-between p-4 bg-background w-screen">
+                    {children}
+                </div>
             )}
         </>
     )

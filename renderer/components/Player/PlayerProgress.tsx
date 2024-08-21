@@ -1,32 +1,39 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Icon } from "../Icon";
 import { stateManager } from "../../stateManager";
 
-interface IPlayerControl {
-    audioRef: HTMLAudioElement
-}
-
 export function PlayerProgress() {
-    const audioRef= stateManager.useSelectedPodcastPlay((state) => state.control)
-    const [currentTime, setCurrentTime]= stateManager.useSelectedPodcastPlay((state) => [state.currentTime, state.setCurrentTime])
-    const [isPlay, setIsPlay]= stateManager.useSelectedPodcastPlay((state) => [state.isPlay, state.setIsPlay])
-    const [progress, setProgress]= stateManager.useSelectedPodcastPlay((state) => [state.progress, state.setProgress])
-    const [duration, setDuration]= stateManager.useSelectedPodcastPlay((state) => [state.duration, state.setDuration])
+    const audioControl= stateManager.useAudioControl((state) => state.control)
+    const setSelected= stateManager.useSelectedPodcastPlay((state) => state.setItem)
+    const [isPlay, setIsPlay]= stateManager.useIsPlay((state) => [state.isPlay, state.setIsPlay])
+    const [currentTime, setCurrentTime]= stateManager.useCurrentTimeStore((state) => [state.currentTime, state.setCurrentTime])
+    const [progress, setProgress]= stateManager.useProgressStore((state) => [state.progress, state.setProgress])
+    const [duration, setDuration]= stateManager.useDurationStore((state) => [state.duration, state.setDuration])
+    const volume= stateManager.useVolumeStore((state) => state.volume)
+
+    const [isManuallyChanging, setIsManuallyChanging] = useState(false);
 
     function startPlay() {
-        audioRef.currentTime = currentTime
-        audioRef.play()
+        audioControl.currentTime = currentTime
+        audioControl.volume = volume
         setIsPlay(true)
+        audioControl.play()
     }
+
     function pausePlay() {
-        audioRef.pause()
         setIsPlay(false)
+        audioControl.pause()
     }
+
+
 
     function handleRangeChange(event: React.ChangeEvent<HTMLInputElement>) {
         const newTime = (parseFloat(event.target.value) / 100) * duration;
-        audioRef.currentTime = newTime;
+        setCurrentTime(newTime);
+        audioControl.currentTime = newTime;
+        setProgress(parseFloat(event.target.value));
+        setIsManuallyChanging(true)
     }
 
     function formatTime(seconds: number) {
@@ -36,25 +43,53 @@ export function PlayerProgress() {
     }
 
     useEffect(() => {
-        if (audioRef) {
+        let isMounted = true
+        if (audioControl && isMounted) {
             const updateProgress = () => {
-                setCurrentTime(audioRef.currentTime);
-                setProgress((audioRef.currentTime / audioRef.duration) * 100);
+                if(!isManuallyChanging) {
+                    setCurrentTime(audioControl.currentTime);
+                    setProgress((audioControl.currentTime / audioControl.duration) * 100);
+
+                }
             };
 
             const handleLoadedMetadata = () => {
-                setDuration(audioRef.duration);
+                setDuration(audioControl.duration);
             };
 
-            audioRef.addEventListener("timeupdate", updateProgress);
-            audioRef.addEventListener("loadedmetadata", handleLoadedMetadata);
+            const handleEnded = () => {
+                stateManager.useSelectedPodcastPlay.persist.clearStorage()
+                setSelected(null)
+            };
+
+            audioControl.addEventListener("timeupdate", updateProgress);
+            audioControl.addEventListener("loadedmetadata", handleLoadedMetadata);
+            audioControl.addEventListener("ended", handleEnded);
 
             return () => {
-                audioRef.removeEventListener("timeupdate", updateProgress);
-                audioRef.removeEventListener("loadedmetadata", handleLoadedMetadata);
+                audioControl.removeEventListener("timeupdate", updateProgress);
+                audioControl.removeEventListener("loadedmetadata", handleLoadedMetadata);
+                audioControl.removeEventListener("ended", handleEnded);
+                isMounted = false
             };
         }
-    }, [audioRef]);
+    }, [audioControl]);
+
+    useEffect(() => {
+        let timer:NodeJS.Timeout 
+        let isMounted = true
+    
+        if(isMounted) {
+             timer = setTimeout(() => {
+                setIsManuallyChanging(false);
+            }, 100);
+        }
+
+        return () => {
+            clearTimeout(timer);
+            isMounted = false
+        }
+    }, [progress]);
 
 
     return (
@@ -71,7 +106,7 @@ export function PlayerProgress() {
                     type="range"
                     className="w-[500px] h-1 m-5"
                     max={100}
-                    value={progress || 0}
+                    value={progress}
                     onChange={handleRangeChange}
                 />
                 <div>{formatTime(duration)}</div>
