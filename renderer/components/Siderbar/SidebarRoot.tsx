@@ -1,5 +1,6 @@
 'use client'
 import { useCallback, useRef, useState } from "react"
+import { stateManager } from "../../stateManager"
 
 export function SidebarRoot({children }: {children?: React.ReactNode, }) {
     const [sidebarWidthRef, setSidebarWidth] = useState(300)
@@ -36,8 +37,10 @@ export function SidebarRoot({children }: {children?: React.ReactNode, }) {
         document.addEventListener('mouseup', handleMouseUp)
     }
 
+    const selectedPodcast = stateManager.useSelectedPodcastPlay((state) => state.item)
+
     return (
-        <div className="relative flex flex-col gap-2 shrink-0 p-2" style={{width: `${sidebarWidthRef}px`}}>
+        <div className="relative flex flex-col gap-2 shrink-0 p-2" style={{width: `${sidebarWidthRef}px`, height: selectedPodcast ? '60vh' : '100vh' }}>
             {children}
             <div 
                 className="absolute h-full hover:w-1 w-[0.05px] right-0 top-0 hover:bg-background-highligh bg-background-highlight cursor-ew-resize" 

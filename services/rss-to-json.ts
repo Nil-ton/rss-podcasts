@@ -24,7 +24,7 @@ export interface IRssItem {
     itunes_image: {href: string}
 }
 
-export default async function rssToJson (xmlRss: string, xmlURL: string): Promise<IRss> {
+export default async function rssToJson (xmlRss: string, xmlURL?: string): Promise<IRss> {
     const xml = new XMLParser({
         attributeNamePrefix: '',
         textNodeName: '$text',
@@ -98,6 +98,5 @@ export default async function rssToJson (xmlRss: string, xmlURL: string): Promis
 
         rss.items.push(obj);
     }
-
     return rss;
 };

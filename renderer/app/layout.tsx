@@ -13,31 +13,31 @@ export default function RootLayout({
             <body className='flex gap-1 fixed min-h-screen z-0'>
                 <Dialog.Root>
                     <Dialog.Content>
-                        <Dialog.Title text='Adicionar'/>
+                        <Dialog.Title text='Adicionar' />
                         <Dialog.Subtitle text='Insira o URL RSS do podcast que você deseja adicionar à lista. Você pode encontrar RSS de podcasts em https://chartable.com/.' />
                         <Dialog.Form />
                     </Dialog.Content>
-                    
                 </Dialog.Root>
-                    <Sidebar.Root>
-                        <Sidebar.Content>
-                            <Sidebar.Header />
-                            <Sidebar.ActionsAdd  />
-                        </Sidebar.Content>
-                        <Sidebar.Content>
-                            <p className='text-xl font-semibold p-2'>Sua Biblioteca</p>
-                        </Sidebar.Content>
-                    </Sidebar.Root>
 
-                    {children}
+                <Sidebar.Root>
+                    <Sidebar.Content>
+                        <Sidebar.Header />
+                        <Sidebar.ActionsAdd />
+                    </Sidebar.Content>
+                    <Sidebar.Content>
+                        <Sidebar.Library />
+                    </Sidebar.Content>
+                </Sidebar.Root>
 
-                    <Footer.Root>
-                        <Player.Root>
-                            <Player.Info />
-                            <Player.Progress />
-                            <Player.Control />
-                        </Player.Root>
-                    </Footer.Root>
+                {children}
+
+                <Footer.Root>
+                    <Player.Root>
+                        <Player.Info />
+                        <Player.Progress />
+                        <Player.Control />
+                    </Player.Root>
+                </Footer.Root>
             </body>
         </html>
     )

@@ -23,7 +23,7 @@ ipcMain.handle('rss-get-podcasts', async () => {
   }
 
   const results = (await Promise.all<IRss>(promises)).flat()
-  
+
   function quicksort(arr: IRss[], left: number, right: number) {
     if (left < right) {
       const pivotIndex = partition(arr, left, right)
@@ -33,7 +33,7 @@ ipcMain.handle('rss-get-podcasts', async () => {
   }
 
   function partition(arr: IRss[], left: number, right: number): number {
-    const pivot = arr[right].items[0]?.created;
+    const pivot = arr[right].items[0].created;
     let i = left - 1;
 
     for (let j = left; j < right; j++) {
@@ -49,7 +49,7 @@ ipcMain.handle('rss-get-podcasts', async () => {
 
   quicksort(results, 0, results.length - 1);
 
-  
+
   for (let i = 0; i < results.length; i++) {
     results[i].items = results[i].items.slice(0, 4)
   }
