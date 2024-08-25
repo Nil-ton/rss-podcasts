@@ -7,8 +7,12 @@ import rssToJson, { IRss, IRssItem } from "../../services/rss-to-json";
 
 
 ipcMain.handle('rss-get-podcasts', async () => {
+  if (!existsSync(pathRssFile)) {
+    return [];
+  }
   const readRssFile = await readFile(pathRssFile, 'utf-8');
   const convertRssFile = JSON.parse(readRssFile) as string[];
+
 
 
   const promises: Promise<IRss>[] = new Array(convertRssFile.length)

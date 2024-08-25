@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { stateManager } from "../../stateManager";
+import { useState } from "react";
 
 const createSchema = z.object({
     url: z.string().url('Insira uma URL válida') // Adiciona validação de URL
@@ -12,7 +13,9 @@ type FormData = z.infer<typeof createSchema>;
 
 export function DialogForm() {
     const setIsOpen = stateManager.useDialogControl((state) => state.setIsOpen)
-    const setRecentlyPodcasts = stateManager.useRecentlyAddedPodcasts((state) => state.setItems)
+    const setRecentlyPodcasts= stateManager.useRecentlyAddedPodcasts((state) => state.setItems)
+    const setPodcastss= stateManager.usePodcasts((state) => state.setItems)
+    const [isLoading, setIsloadingRequest] = useState(false)
     const { register, handleSubmit, formState: { errors }, setError } = useForm<FormData>({
         resolver: zodResolver(createSchema),
     });
@@ -20,11 +23,16 @@ export function DialogForm() {
     // Defina o tipo da função onSubmit
     const onSubmit = async (data: FormData) => {
         try {
+            setIsloadingRequest(true)
             await window.ipc.handle('rss-save', data.url)
             await setRecentlyPodcasts(1, 4)
+            await setPodcastss()
+            setIsOpen(false)
         } catch (error) {
-            setError("url", {message: 'Rss já cadastrado'})
+            const errorMessage = error.message.replace(/Error invoking remote method 'rss-save': Error: /, '');
+            setError("url", { message: errorMessage });
         }
+        setIsloadingRequest(false)
     };
 
     return (
@@ -45,8 +53,8 @@ export function DialogForm() {
                     Fechar
                 </button>
                 
-                <button type="submit" className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
-                    Salvar
+                <button type="submit" disabled={isLoading} className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
+                    {isLoading ? 'Salvando...' : 'Salvar'}
                 </button>
             </div>
 

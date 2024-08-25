@@ -6,7 +6,7 @@ import { stateManager } from "../stateManager";
 import { IRssItem } from "../../services/rss-to-json";
 
 export default function Page() {
-    const [podcastRecently, setPodcastRecently] = stateManager.useRecentlyAddedPodcasts((state) => [state.items, state.setItems])
+    const [podcastRecently, setPodcastRecently, isLoadingPodcastRecently] = stateManager.useRecentlyAddedPodcasts((state) => [state.items, state.setItems, state.isLoading])
     const [podcasts, setPodcasts] = stateManager.usePodcasts((state) => [state.items, state.setItems])
     const setSelectedPodcast = stateManager.useSelectedPodcastPlay((state) => state.setItem)
     const [volume, setVolume] = stateManager.useVolumeStore((state) => [state.volume, state.setVolume])
@@ -52,7 +52,8 @@ export default function Page() {
     }, []);
 
     return (
-        podcastRecently.length !== 0 ? (
+
+        isLoadingPodcastRecently ? 'Carregando' :  podcastRecently?.length !== 0 ? (
             <Main.Root>
 
                 <Main.Title title="Últimos Episódios" />
@@ -79,6 +80,6 @@ export default function Page() {
                 }
             </ Main.Root>
 
-        ) : 'Carregando...'
+        ) : 'Adicione RSS'
     )
 }

@@ -3,6 +3,7 @@ import { IRssItem } from '../../services/rss-to-json'
 
 interface IRecentlyAddedPodcasts {
     items: IRssItem[]
+    isLoading: boolean
 }
 
 interface IActions {
@@ -11,9 +12,10 @@ interface IActions {
 
 export const useRecentlyAddedPodcasts = create<IRecentlyAddedPodcasts & IActions>((set, get) => ({
     items: [],
+    isLoading: true,
     setItems: async (offset: number, limit: number) => {
         const newItems: IRssItem[] = await window.ipc.handle('rss-get-items', [offset, limit])
-        set({ items: newItems})
+        set({ items: newItems, isLoading: false})
     },
 }))
 
