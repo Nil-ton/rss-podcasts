@@ -4,7 +4,7 @@ interface IFooterRoot {
 
 export function FooterRoot({children}: IFooterRoot) {
     return (
-        <div className="absolute bottom-0 left-0">
+        <div id="grid-in-footer">
             {children}
         </div>
     )

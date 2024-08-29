@@ -26,7 +26,7 @@ export function PlayerRoot({ children }: IPlayerRoot) {
         <>
             <audio src={selectedPodcastPlay?.enclosures[0].url} ref={audioRef} />
             {selectedPodcastPlay && (
-                <div className="flex justify-between p-4 bg-background w-screen">
+                <div className="flex justify-between p-4 bg-background">
                     {children}
                 </div>
             )}

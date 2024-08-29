@@ -36,3 +36,27 @@
 #header-system-root button:active {
   opacity: 0.6;
 }
+
+.grid-areas-layout {
+  grid-template-areas: 
+    "header-system header-system"
+    "sidebar main"
+    "sidebar main"
+    "footer footer";
+}
+
+#grid-in-sidebar {
+  grid-area: sidebar;
+}
+
+#grid-in-main {
+  grid-area: main;
+}
+
+#grid-in-footer {
+  grid-area: footer;
+}
+
+#header-system-root {
+  grid-area: header-system;
+}

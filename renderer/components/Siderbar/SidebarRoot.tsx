@@ -40,7 +40,7 @@ export function SidebarRoot({children }: {children?: React.ReactNode, }) {
     const selectedPodcast = stateManager.useSelectedPodcastPlay((state) => state.item)
 
     return (
-        <div className="relative flex flex-col gap-2 shrink-0 p-2" style={{width: `${sidebarWidthRef}px`, height: selectedPodcast ? '60vh' : '100vh' }}>
+        <div className="relative flex flex-col gap-2 shrink-0 p-2 max-h-full" style={{width: `${sidebarWidthRef}px`}} id="grid-in-sidebar">
             {children}
             <div 
                 className="absolute h-full hover:w-1 w-[0.05px] right-0 top-0 hover:bg-background-highligh bg-background-highlight cursor-ew-resize" 

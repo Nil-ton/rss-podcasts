@@ -54,8 +54,7 @@ export default function Page() {
     return (
 
         isLoadingPodcastRecently ? 'Carregando' :  podcastRecently?.length !== 0 ? (
-            <Main.Root>
-
+            <>
                 <Main.Title title="Últimos Episódios" />
                 <PodcastsGrid.Root>
                     {podcastRecently.map((item, i) => (
@@ -78,8 +77,8 @@ export default function Page() {
                         </div>
                     ))
                 }
-            </ Main.Root>
+            </>
 
-        ) : 'Adicione RSS'
+        ) : <p>Adicione RSS</p>
     )
 }

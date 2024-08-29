@@ -6,7 +6,7 @@ export function SideBarLibrary() {
     const podcasts = stateManager.usePodcasts((state) => state.items)
   
     return (
-        <div className="h-screen">
+        <div className="h-full overflow-y-auto">
             <p className='text-xl font-semibold p-2'>Sua Biblioteca</p>
                 {podcasts.map((podcast) => ( podcast.title &&
                     <div key={podcast?.title + '_library'} className="flex items-center mb-4 mx-2">
