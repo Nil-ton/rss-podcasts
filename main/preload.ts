@@ -16,7 +16,10 @@ const handler = {
   async handle<T>(channel:string, value?:any): Promise<T> {
     const rss = await ipcRenderer.invoke(channel, value)
     return rss
-  }
+  },
+  minimizeWindow: () => ipcRenderer.send('minimize-window'),
+  maximizeWindow: () => ipcRenderer.send('maximize-window'),
+  closeWindow: () => ipcRenderer.send('close-window')
 }
 
 contextBridge.exposeInMainWorld('ipc', handler)
