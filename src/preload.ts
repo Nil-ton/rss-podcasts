@@ -2,6 +2,9 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
+if (process.env.TEST === 'true') {
+  require('wdio-electron-service/preload');
+}
 
 const handler = {
   send(channel: string, value: unknown) {

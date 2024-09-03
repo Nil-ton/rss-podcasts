@@ -8,6 +8,10 @@ import { mkdir } from 'fs/promises'
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
+if (process.env.TEST === 'true') {
+  require('wdio-electron-service/main');
+}
+
 export const dataPath = join(app.getPath('userData'), 'data')
 export const pathRssFile = join(dataPath, 'rss.json')
 
@@ -34,7 +38,7 @@ const createWindow = (): void => {
       contextIsolation: true,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
-    title: 'RSS Podcast'
+    title: 'RSS Podcasts'
   });
 
   // and load the index.html of the app.
