@@ -1,5 +1,6 @@
 /// <reference types="wdio-electron-service" />
 import type { Options } from '@wdio/types'
+process.env.TEST = 'true';
 export const config: Options.Testrunner = {
     //
     // ====================
@@ -53,6 +54,7 @@ export const config: Options.Testrunner = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
+    // @ts-expect-error
     capabilities: [{
         browserName: 'electron',
         // Electron service options
@@ -70,7 +72,7 @@ export const config: Options.Testrunner = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'info',
+    logLevel: 'warn',
     //
     // Set specific log levels per logger
     // loggers:
