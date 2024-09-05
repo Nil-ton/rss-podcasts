@@ -116,8 +116,6 @@ describe('Application Colors', () => {
         const podcastContent = $(selectors.podcastContent)
         await podcastContent.moveTo()
 
-        await browser.pause(2000);
-
         await podcastContent.getCSSProperty('background-color')
         await expectBackgroundColor(podcastContent, '#2a2a2a')
     })
