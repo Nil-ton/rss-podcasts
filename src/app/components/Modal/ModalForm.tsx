@@ -42,6 +42,7 @@ export function DialogForm() {
                 type="text"
                 className="w-full px-4 py-2 text-white bg-background-elevated-highligh border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out"
                 placeholder="Cole o URL RSS aqui"
+                data-test="rss-url-input"
             />
 
             {errors.url && (
@@ -53,7 +54,7 @@ export function DialogForm() {
                     Fechar
                 </button>
                 
-                <button type="submit" disabled={isLoading} className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
+                <button data-test="rss-save-button" type="submit" disabled={isLoading} className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
                     {isLoading ? 'Salvando...' : 'Salvar'}
                 </button>
             </div>

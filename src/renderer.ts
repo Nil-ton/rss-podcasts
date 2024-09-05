@@ -26,5 +26,5 @@
  * ```
  */
 
-import './index.css';
-import './main'
+import './app/index.css';
+import './app/main'

@@ -10,7 +10,7 @@ interface ISiderBarActions extends ComponentProps<'button'> {
 export function SidebarActionsAdd() {
     const setIsOpen = stateManager.useDialogControl((state) => state.setIsOpen)
     return (
-        <button onClick={() => setIsOpen(true)} className="p-3 rounded-3xl flex items-center gap-2 font-semibold hover:text-text-base duration-500">
+        <button onClick={() => setIsOpen(true)} className="p-3 rounded-3xl flex items-center gap-2 font-semibold hover:text-text-base duration-500" data-test="sidebar-add-button">
             <Icon.AddSolid className="h-8 w-8"/>
             <p>Adicionar</p>
         </button>

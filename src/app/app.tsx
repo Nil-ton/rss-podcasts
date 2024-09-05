@@ -78,6 +78,6 @@ export default function App() {
                 }
             </>
 
-        ) : <p>Adicione RSS</p>
+        ) : <p data-test="rss-empty">Adicione RSS</p>
     )
 }
